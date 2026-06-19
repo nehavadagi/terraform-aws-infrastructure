@@ -60,7 +60,7 @@ terraform-aws-infrastructure/
 
 ---
 
-## Module 1: VPC — Networking Foundation ✅
+## Module 1: VPC — Networking Foundation 
 
 **What it builds:** A custom VPC with one public subnet (internet-facing) and one private subnet (internal-only), connected via an Internet Gateway and a route table.
 
@@ -103,14 +103,14 @@ terraform-aws-infrastructure/
 
 ---
 
-## Module 2: EC2 — Compute Layer 🚧
+## Module 2: EC2 — Compute Layer 
 *(in progress)*
 
 **What it will build:** A security group (firewall rules for SSH + HTTP access) and an EC2 instance placed in the public subnet, with a startup script that automatically installs and configures a web server on boot.
 
 ---
 
-## Module 3: RDS — Database Layer ⏳
+## Module 3: RDS — Database Layer 
 *(pending)*
 
 **What it will build:** A MySQL database instance inside the private subnet, with a security group that only trusts inbound traffic from the EC2 instance's security group — never directly from the internet.
@@ -130,7 +130,7 @@ terraform-aws-infrastructure/
 
 ## What I Learned
 
-*(fill this in as the project progresses — reflect on what clicked, what was confusing at first, and any real debugging moments, e.g. the "0 added, 0 changed" issue caused by an empty tfvars file)*
+*(will be filled as the project progresses further)*
 
 ---
 
