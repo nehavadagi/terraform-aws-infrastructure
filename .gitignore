@@ -14,4 +14,6 @@ crash.log
 
 # Override files
 override.tf
-override.tf.json
+override.tf.json*.pem
+
+echo "*.pem" >> .gitignore

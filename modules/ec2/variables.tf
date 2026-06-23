@@ -1,11 +1,13 @@
 variable "project_name" {
-  description = "Prefix used to name all resources"
-  type        = string
+  type = string
 }
 
-variable "availability_zone" {
-  description = "AWS availability zone to deploy into"
-  type        = string
+variable "vpc_id" {
+  type = string
+}
+
+variable "public_subnet_id" {
+  type = string
 }
 
 variable "ami_id" {
