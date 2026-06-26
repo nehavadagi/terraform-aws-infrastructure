@@ -266,4 +266,4 @@ When running `terraform apply`, AWS rejected the RDS subnet group creation with:
 ## Author
 
 **Neha Vadagi**
-Cloud Operations Engineer | [LinkedIn](https://www.linkedin.com/in/neha-vadagi-9616731b3/) | [GitHub](https://github.com/nehavadagi)
+Cloud Operations Engineer | [Portfolio](https://nehavadagi.github.io/neha-portfolio/) | [LinkedIn](https://www.linkedin.com/in/neha-vadagi-9616731b3/) | [GitHub](https://github.com/nehavadagi)
