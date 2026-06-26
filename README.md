@@ -232,7 +232,7 @@ When running `terraform apply`, AWS rejected the RDS subnet group creation with:
 
 **`terraform output rds_endpoint` — database endpoint available:**
 
-[Output RDS Endpoint](docs/screenshots/rds-endpoint-output.png)
+![Output RDS Endpoint](docs/screenshots/rds-endpoint-output.png)
 
 ---
 
