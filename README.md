@@ -182,10 +182,57 @@ This returned `t3.micro`, `t3.small`, `t4g.micro`, `t4g.small` — but **not** `
 
 ---
 
-## Module 3: RDS — Database Layer ⏳
-*(in progress)*
+## Module 3: RDS — Database Layer ✅
 
-**What it will build:** A MySQL database instance inside the private subnet, with a security group that only trusts inbound traffic from the EC2 instance's security group — never directly from the internet, and never from my own IP either.
+**What it builds:** A MySQL 8.0 database instance placed in the private subnets, with a security group that only trusts inbound traffic from the EC2 instance's security group — never directly from the internet, and never from my own IP either. The database spans two Availability Zones to satisfy AWS's RDS subnet group requirements.
+
+**Why this design:**
+- The database is **isolated** in private subnets with no public accessibility (`publicly_accessible = false`).
+- The security group uses a **security group reference** (not an IP range) to allow MySQL traffic only from the EC2 instance's security group — this ensures the tightest possible trust relationship.
+- **Multi-AZ subnet group** ensures the RDS instance can be deployed across Availability Zones, satisfying AWS's requirement for high availability.
+
+**Resources created:**
+- 1 DB subnet group (spanning two private subnets in different AZs)
+- 1 security group (`nv-infra-rds-sg`) — MySQL port 3306 from EC2 security group only
+- 1 RDS MySQL 8.0 instance (`db.t3.micro`, 20GB storage, automated backups)
+
+### Steps taken
+
+1. Wrote `modules/rds/main.tf`, `variables.tf`, `outputs.tf`
+2. Added a second private subnet in the root `main.tf` to satisfy AWS's requirement for at least 2 Availability Zones
+3. Wired the RDS module into the root `main.tf`, passing:
+   - VPC ID
+   - A list of private subnet IDs (both AZs)
+   - EC2 security group ID (to lock down access)
+   - Database credentials from `terraform.tfvars`
+4. Updated root `variables.tf` with RDS variables (`db_instance_class`, `db_name`, `db_username`, `db_password`)
+5. Ran `terraform plan` to verify the 3 resources to be created
+6. Ran `terraform apply` to provision the DB subnet group, security group, and RDS instance
+7. Verified the database endpoint using `terraform output rds_endpoint`
+
+### Real debugging story: RDS subnet group AZ coverage requirement
+
+When running `terraform apply`, AWS rejected the RDS subnet group creation with:
+
+
+**Root cause:** AWS RDS requires a DB subnet group to have subnets in at least 2 Availability Zones — even for a single-instance deployment — to support failover scenarios. The existing VPC module only had one private subnet in `ap-south-1a`.
+
+**How I diagnosed it:** I researched the error and confirmed in the AWS documentation that RDS requires at least 2 AZs for a subnet group.
+
+**Fix:** Added a second private subnet in `ap-south-1b` directly in the root `main.tf`, and updated the RDS module to accept a list of subnet IDs (`private_subnet_ids`) instead of a single ID. The RDS subnet group now uses both private subnets.
+
+**Lesson:** Always check AWS service-specific requirements (like RDS's 2-AZ minimum) when designing your VPC architecture — services often have requirements that aren't obvious from a generic VPC design.
+
+### Screenshots
+
+**`terraform plan` — RDS resources ready to be created:**
+
+![RDS Plan](docs/screenshots/rdsplan.png)
+
+
+**`terraform output rds_endpoint` — database endpoint available:**
+
+[Output RDS Endpoint](docs/screenshots/rds-endpoint-output.png)
 
 ---
 
