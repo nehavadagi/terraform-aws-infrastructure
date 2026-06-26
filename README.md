@@ -256,8 +256,10 @@ When running `terraform apply`, AWS rejected the RDS subnet group creation with:
 - That AWS Free Tier eligibility isn't a fixed global list — it varies by account, and the only reliable way to check is by querying the AWS API directly (`describe-instance-types`) rather than trusting tutorials
 - How security groups can reference *other security groups* (not just IP ranges) to create tightly scoped trust relationships — this is how the RDS database will only trust the EC2 instance, and nothing else
 - Practical Git workflow habits for infrastructure-as-code: committing after each verified module, keeping `.gitignore` strict from day one to avoid ever committing state files or secrets
-
-*(more to be added once the RDS module is complete)*
+- That AWS RDS requires at least 2 Availability Zones for a DB subnet group — even for a single-instance deployment — and how to diagnose and fix the DBSubnetGroupDoesNotCoverEnoughAZs error by adding subnets across multiple AZs
+- How RDS provisioning takes 5-10 minutes, and Terraform's "Still modifying..." messages during this time are normal — patience is required when working with managed database services
+- That RDS security groups should reference EC2 security group IDs rather than IP ranges, creating a dynamic, least-privilege trust relationship that doesn't break when IP addresses change
+- How to expose RDS endpoints as Terraform outputs (rds_endpoint) for easy application configuration and connection testing without digging through the AWS Console
 
 ---
 
